@@ -1,12 +1,12 @@
-@import url("./theme.css");
+@use "theme" as *;
 
 .calendar-container{
-    background-color: @base;
+    background-color: $base;
 
 }
 
 calendar{
-	background: @crust;
+	background: $crust;
 	font-family: "Ubuntu Nerd Font";
 	font-weight: bold;
 	font-size: 15px;
@@ -16,7 +16,7 @@ calendar{
 }
 
 calendar:selected {
-	background-color: @mauve;
+	background-color: $mauve;
 	border-radius: 50px;
 
 }

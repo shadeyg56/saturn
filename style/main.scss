@@ -1,0 +1,20 @@
+@use "controlcenter";
+@use "bar";
+@use "mediawindow";
+@use "osd";
+@use "calendar";
+
+
+* {
+    all: unset;
+}
+
+label {
+    font-weight: bold;
+    font-family: "Ubuntu Nerd Font";
+    font-size: 12pt;
+}
+
+revealer {
+    padding: 1px;
+}

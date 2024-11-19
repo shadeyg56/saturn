@@ -1,13 +1,13 @@
-@import url("./theme.css");
+@use "theme" as *;
 
 .bar {
-    background-color: @base-transparent;
+    background-color: $base-transparent;
     border-radius: 24px;
     min-height: 32px;
   }
 
 .rightBox {
-    background-color: @crust-transparent;
+    background-color: $crust-transparent;
     color: #ffffff;
     margin: 6px;
     padding: 0 12px;
@@ -16,7 +16,7 @@
 }
 
 .clock {
-    background-color: @crust-transparent;
+    background-color: $crust-transparent;
     color: #ffffff;
     margin: 6px;
     padding: 0 12px;
@@ -25,8 +25,8 @@
   }
 
 .focusedTitle {
-    background-color: @crust-transparent;
-    color: @mauve;
+    background-color: $crust-transparent;
+    color: $mauve;
     margin: 6px;
     padding: 0 12px;
     border-radius: 24px;
@@ -85,7 +85,7 @@
 
 .workspaces {
     color: #ffffff;
-    background-color: @crust-transparent;
+    background-color: $crust-transparent;
     margin: 6px;
     padding: 0 6px;
     border-radius: 24px;
@@ -96,22 +96,22 @@
     padding: 0 0.4rem;
     border-radius: 24px;
     margin: 0 5px;
-    background-color: @surface0;
+    background-color: $surface0;
     transition: background-color 0.25s ease-in;
 }
 
 .workspaces button:hover, .workspaces button.active:hover{
-    background-color: @mauve;
+    background-color: $mauve;
 }
 
 .workspaces button.focused {
-    background-color: @mauve;
+    background-color: $mauve;
     margin: 0 3.5px;
     border-radius: 24px;
 }
 
 .workspaces button.active{
-    background-color: @overlay1
+    background-color: $overlay1
 }
 
 .workspaces button.focused label{
