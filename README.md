@@ -5,6 +5,12 @@ A simple GTK widget suite for Wayland scaffolded with [AGS](https://github.com/a
 As this setup is mostly intended for personal use, there is no configuration options. If you'd like to modify this setup, visit the [Hacking](#hacking) section below
 
 
+Preview - Last Updated (11/18/2024)
+
+https://github.com/user-attachments/assets/c1995cca-1b4b-41ff-81e7-f75f73cd4fe0
+
+
+
 ## Features
 * Bar
 * Control Center
@@ -14,6 +20,7 @@ As this setup is mostly intended for personal use, there is no configuration opt
 
 ### Todo
 * Notifications
+* Power Menu
 
 ## Hacking
 
