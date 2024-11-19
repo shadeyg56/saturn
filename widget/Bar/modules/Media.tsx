@@ -3,10 +3,11 @@ import { bind, Variable } from "astal";
 import { Widget, Gtk, App } from "astal/gtk3";
 import Pango from "gi://Pango";
 import { toggleWindow } from "../../../utils";
-import Cava from "gi://AstalCava";
 
 const media = Mpris.get_default();
-const cava = Cava.get_default();
+
+// this is cursed but fine for now
+export const activePlayer = Variable(false);
 
 
 function PlayerIcon(player: Mpris.Player, { symbolic = true, ...props } = {}) {
@@ -77,11 +78,11 @@ export default function MediaIndicator() {
                     const player = players.find((p) => p.get_entry() === "spotify") ?? players[0];
         
                     if (!player) {
-                        cava?.set_active(false);
+                        activePlayer.set(false);
                         return "";
                     }
 
-                    cava?.set_active(true);
+                    activePlayer.set(true);
 
                     return [
                         PlayerIcon(player),

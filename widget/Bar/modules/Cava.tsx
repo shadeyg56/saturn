@@ -2,10 +2,9 @@ import { Widget } from "astal/gtk3";
 import { bind, Variable } from "astal";
 import cairo from "cairo";
 import Cava from "gi://AstalCava";
-import Mpris from "gi://AstalMpris";
+import { activePlayer } from "./Media";
 
 const cava = Cava.get_default()!;
-const media = Mpris.get_default();
 
 export default function Visualizer() {
 
@@ -36,7 +35,7 @@ export default function Visualizer() {
 
 
     return (
-        <box className={"cava"} expand={true} visible={bind(cava, "active")}>
+        <box className={"cava"} expand={true} visible={bind(activePlayer)}>
             <drawingarea expand={true} setup={setup}/>
         </box>
     )
