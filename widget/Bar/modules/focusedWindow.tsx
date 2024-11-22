@@ -15,7 +15,7 @@ function FocusedWindow() {
         >
             {
                 client((client) => {
-                    const title = bind(client, "title");
+                    const title = (client != null) ? bind(client, "title") : "";
                     return (
                         <label
                         maxWidthChars={40}
