@@ -29,4 +29,5 @@ jobs:
       with:
         name: saturn
         path: ./result/bin/.saturn-wrapped
+        include-hidden-files: true
         
