@@ -18,7 +18,13 @@ export default function Visualizer() {
             const width = self.get_allocated_width()/cava.bars;
             const height = self.get_allocated_height()-15;
             let currentX = 0;
-            values.get().forEach((value) => {
+            let currentValues = values.get();
+            if (cava.get_stereo()) {
+                const right = currentValues.splice(0, cava.bars/2);
+                currentValues.reverse();
+                currentValues = currentValues.concat(right);
+            }
+            currentValues.forEach((value) => {
                 cr.rectangle(currentX, 32, width, value*-1*height);
                 cr.fill();
                 currentX += width;
@@ -29,6 +35,7 @@ export default function Visualizer() {
 
 
         cava.connect("notify::values", () => self.queue_draw());
+        cava.set_stereo(true);
         
     }
 
