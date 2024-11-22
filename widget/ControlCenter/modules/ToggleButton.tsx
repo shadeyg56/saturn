@@ -81,6 +81,10 @@ export function ArrowToggleButton({
             <button
             onClick={(_, event) => {
                 if (event.button === Astal.MouseButton.PRIMARY) {
+                    controlCenterStackWidget.set(name)
+
+                }
+                else if (event.button === Astal.MouseButton.SECONDARY) {
                     if (condition.get()) {
                         deactivate();
                         if (opened.get() === name)
@@ -88,9 +92,6 @@ export function ArrowToggleButton({
                     } else {
                         activate();
                     }
-                }
-                else if (event.button === Astal.MouseButton.SECONDARY) {
-                    controlCenterStackWidget.set(name)
                 }
 
             }}
