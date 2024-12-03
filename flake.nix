@@ -2,7 +2,9 @@
   description = "A simple widget suite for Wayland built with Astal";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/18979df9f0be9d69f0e4d35059914c1a868c79b8";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-pinned.url = github:NixOS/nixpkgs/18979df9f0be9d69f0e4d35059914c1a868c79b8;
+
 
     ags = {
       url = "github:aylur/ags";
@@ -17,10 +19,19 @@
 
   };
 
-  outputs = { self, nixpkgs, ags, ... }: 
+  outputs = { self, nixpkgs, nixpkgs-pinned, ags, astal, ... }: 
   let 
     system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
+
+    cava = nixpkgs-pinned.legacyPackages.${system}.callPackage "${astal}/nix/libcava.nix" {};
+
+    cava-fix = agsPkgs.cava.overrideAttrs (final: prev:  {
+        propagatedBuildInputs = [ cava pkgs.glib ];
+    });
+
+    pkgs = import nixpkgs { 
+      inherit system;
+    };
     agsPkgs = ags.packages.${system};
   in {
 
@@ -37,7 +48,7 @@
         network
         mpris
         bluetooth
-        cava
+        cava-fix
       ];
     };
 
