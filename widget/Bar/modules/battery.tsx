@@ -45,6 +45,7 @@ export default function BatteryWidget() {
         <button className="battery"
         onHover={() => {revealChild.set(true);}}
         onHoverLost={() => revealChild.set(false)}
+        visible={bind(battery, "isPresent")}
         >
             <box>
                 <BatteryIcon/>
