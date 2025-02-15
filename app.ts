@@ -11,7 +11,7 @@ App.start({
     main() {
         const mainMonitor = App.get_monitors()[0]
 
-        App.get_monitors().map(Bar)
+        Bar(mainMonitor)
         ControlCenter(mainMonitor)
         MediaWindow(mainMonitor)
         CalendarWindow(mainMonitor)
