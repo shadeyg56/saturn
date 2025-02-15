@@ -29,6 +29,7 @@ export default function Governors() {
     return (
         <box className="toggle-button"
         homogeneous={true}
+        visible={bind(auto_cpufreq, "available")}
         >  
             <GovernorButton name="Powersave"
             icon="power-profile-power-saver-symbolic"
