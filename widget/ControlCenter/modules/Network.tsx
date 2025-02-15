@@ -8,6 +8,38 @@ const network = Network.get_default();
 
 export function NetworkToggle() {
 
+    if (network.wifi) {
+        return <WifiToggle></WifiToggle>
+    }
+    else if (network.wired) {
+        return <Ethernet></Ethernet>
+    }
+    return <box></box>
+    
+}
+
+function Ethernet() {
+
+    const label = <label
+        ellipsize={Pango.EllipsizeMode.END}
+        label={bind(network.wired, "internet").as((state) => 
+            state === Network.Internet.CONNECTED ? "Connected": "Not Connected")
+        }
+    />
+
+    return <box className="toggle-button active">
+        <button>
+            <box className="label-box-horizontal" hexpand={true}>
+                <icon
+                    icon={bind(network.wired, "iconName")}
+                />
+                {label}
+            </box>
+        </button>
+    </box>
+}
+
+function WifiToggle() {
     const toggleIcon = <icon
         icon={bind(network.wifi, "iconName")}
     />
@@ -36,6 +68,10 @@ export function NetworkToggle() {
 
 export function WifiMenu() {
 
+    if (!network.wifi) {
+        return <box></box>
+    }
+
     const accessPoints = bind(network.wifi, "accessPoints").as((aps) => 
         aps.filter((ap, index, array) => 
             array.findIndex(obj => obj.ssid === ap.ssid) === index
@@ -47,7 +83,8 @@ export function WifiMenu() {
         <Menu name="network"
             title="Wifi Network"
         >
-            <box vertical={true}>
+            <box vertical={true}
+            >
                     {bind(Variable.derive([bind(accessPoints), bind(network.wifi, "activeAccessPoint")], ((aps, active) => aps.map((ap) =>
                         <button className="menu-item"
                         onClick={() => {
