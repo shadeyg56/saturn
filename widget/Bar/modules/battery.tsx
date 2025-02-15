@@ -13,7 +13,7 @@ function BatteryIcon() {
 
     return (
         <icon 
-        className="batIcon"
+        className="barIcon"
         icon={batteryBind()}
         />
     )

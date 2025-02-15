@@ -12,7 +12,7 @@ export default function NetworkIndicator() {
     ])
 
     return (
-        <stack className="netIcon"
+        <stack className="barIcon"
         shown={bind(network, "primary").as((p) => enumMap.get(p) ?? "disconnected")}
         >
             <icon name="wifi"

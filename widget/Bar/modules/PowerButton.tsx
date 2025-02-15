@@ -8,7 +8,7 @@ export default function PowerButton() {
     }
 
     return (
-        <button className="powerButton"
+        <button className="powerButton barIcon"
         onClick={handleClick}
         >
             <icon icon="system-shutdown-symbolic"/>

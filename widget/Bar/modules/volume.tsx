@@ -23,7 +23,7 @@ function VolumeIcon() {
 
 
     return (
-        <box className="volIcon">
+        <box className="barIcon">
             <stack setup={(setupStack)}>
                 <icon name="101" icon="audio-volume-overamplified-symbolic"/>
                 <icon name="67" icon="audio-volume-high-symbolic"/>

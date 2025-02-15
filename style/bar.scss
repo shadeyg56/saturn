@@ -38,8 +38,6 @@
 }
 
 .powerButton {
-    font-size: 14pt;
-    margin: 5px 5px;
     color: rgb(242, 143, 173)
 }
 
@@ -52,19 +50,9 @@
     transition: -gtk-icon-transform 0.25s ease-in;
 }
 
-.batIcon {
+.barIcon {
     font-size: 14pt;
     margin: 5px 5px;
-}
-
-.volIcon {
-    margin: 5px 2px 0px 5px;
-    font-size: 14pt;
-}
-
-.netIcon {
-    margin: 5px 5px;
-    font-size: 14pt;
 }
 
 .volBar {
