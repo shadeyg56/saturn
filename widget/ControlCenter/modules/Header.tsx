@@ -1,8 +1,7 @@
 import Battery from "gi://AstalBattery"
-import { bind, execAsync, Variable } from "astal";
+import { bind, exec, execAsync } from "astal";
 import { Gtk } from "astal/gtk3"
 import { uptime } from "../../../utils";
-import { Scrollable } from "../../../../../../../.local/share/ags/gtk3/widget";
 
 function BatteryProgress() {
 
@@ -34,31 +33,42 @@ function BatteryProgress() {
 
 
 export default function Header() {
+
+    const userName = exec("whoami");
+    
     return (
         <box className="header horizontal">
             <box className="system-box"
-            vertical={true}
             hexpand={true}
             >
                 <box>
-                    <label className="uptime"
-                    hexpand={false}
-                    valign={Gtk.Align.CENTER}
-                    label={uptime().as((uptime) => `uptime: ${uptime}`)}
+                    <box className={"profile-picture"}
+                    css={`background-image: url("widget/ControlCenter/profile.png");`}
                     />
-                    <button
-                    valign={Gtk.Align.CENTER}
+                    <box
+                    vertical={true}
                     >
-                        <icon icon="system-lock-screen-symbolic"/>
-                    </button>
-                    <button
+                        <label className={"username"}
+                        label={userName}
+                        />
+                        <label className="uptime"
+                        hexpand={false}
+                        valign={Gtk.Align.CENTER}
+                        vexpand={true}
+                        visible={false}
+                        label={uptime().as((uptime) => `uptime: ${uptime}`)}
+                        />
+                    </box>
+                    
+                    <button className={"powerButton-CC"}
                     valign={Gtk.Align.CENTER}
+                    hexpand={true}
+                    halign={Gtk.Align.END}
                     onClick={() => execAsync(["adios", "--systemd"])}
                     >
                         <icon icon="system-shutdown-symbolic"/>
                     </button>
                 </box>
-                <BatteryProgress/>
             </box>
         </box>
     )

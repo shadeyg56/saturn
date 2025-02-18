@@ -20,7 +20,7 @@
     padding: 6px 6px;
     margin: 5px 5px;
     border-radius: 6px;
-    background-color: $surface1;
+    // background-color: $surface1;
     font-size: 12pt;
 }
 
@@ -31,6 +31,32 @@
     padding: 6px 6px;
     border-radius: 12px;
     font-weight: bolder;
+}
+
+.system-box label {
+    margin: 5px;
+}
+
+.profile-picture {
+	background-size: cover;
+	min-width: 75px;
+	min-height: 75px;
+	margin: 5px;
+	border-radius: 50%;
+}
+
+.username {
+    color: $mauve;
+    margin-top: 15px;
+    margin-left: -2px;
+    
+}
+
+.controlcenter .powerButton-CC{
+    color: $red;
+    border-radius: 50%;
+	font-size: 25px;
+	margin-right: 10px;
 }
 
 .sliders-box {
