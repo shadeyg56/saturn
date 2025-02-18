@@ -5,6 +5,7 @@ import ControlCenter from "./widget/ControlCenter/ControlCenter"
 import MediaWindow from "./widget/MediaWindow/Media"
 import CalendarWindow from "./widget/Calendar"
 import OSDWindow from "./widget/OSD"
+import NotificationPopups from "./widget/Notification"
 
 App.start({
     css: style,
@@ -16,5 +17,6 @@ App.start({
         MediaWindow(mainMonitor)
         CalendarWindow(mainMonitor)
         OSDWindow(mainMonitor)
+        NotificationPopups(mainMonitor)
     }
 })

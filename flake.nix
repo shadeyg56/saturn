@@ -38,11 +38,12 @@
         mpris
         bluetooth
         cava
+        notifd
       ];
     };
 
     devShells.${system}.default = pkgs.mkShell {
-      buildInputs = [ agsPkgs.agsFull ];
+      buildInputs = [ agsPkgs.agsFull pkgs.libnotify ];
       shellHook = ''
         # Generate types if they don't exist
         if [ ! -d ./@girs ];
