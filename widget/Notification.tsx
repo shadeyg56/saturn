@@ -85,6 +85,7 @@ export default function NofificationPopups(gdkmonitor: Gdk.Monitor) {
             >    */}
             <box className="notifications-popup"
             vertical
+            //@ts-ignore
             noImplicitDestroy
             >
                 {bind(notifs)}
