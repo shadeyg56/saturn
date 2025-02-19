@@ -10,7 +10,8 @@ const TIMEOUT_DELAY = 5000
 type NotificationMapOpts = {
     timeout: number,
     dismissOnTimeout?: boolean,
-    limit?: number
+    limit?: number,
+    persist?: boolean
 }
 
 const notifd = Notifd.get_default()
@@ -21,6 +22,9 @@ const notifd = Notifd.get_default()
 export default class NotificationMap implements Subscribable {
 
     private limit: number | undefined = undefined;
+    private timeout: number = 0;
+    private dismissOnTimeout: boolean | undefined = undefined;
+    
 
     // the underlying map to keep track of id widget pairs
     private map: Map<number, Gtk.Widget> = new Map()
@@ -34,7 +38,7 @@ export default class NotificationMap implements Subscribable {
         this.var.set([...this.map.values()].reverse())
     }
 
-    constructor(options: NotificationMapOpts = {timeout: 0, dismissOnTimeout: false}) {
+    constructor(options: NotificationMapOpts = {timeout: 0, dismissOnTimeout: false, persist: false}) {
 
         /**
          * uncomment this if you want to
@@ -45,34 +49,21 @@ export default class NotificationMap implements Subscribable {
         // notifd.ignoreTimeout = true
 
         this.limit = options.limit;
+        this.timeout = options.timeout;
+        this.dismissOnTimeout = options.dismissOnTimeout;
+
+        if (options.persist)
+            notifd.get_notifications().forEach((notif) => {
+                this.create(notif.id)
+            })
+        
 
         notifd.connect("notified", (_, id) => {
             if (notifd.get_dont_disturb()) {
                 return;
             }
 
-            this.set(id, Notification({
-                notification: notifd.get_notification(id)!,
-
-                // once hovering over the notification is done
-                // destroy the widget without calling notification.dismiss()
-                // so that it acts as a "popup" and we can still display it
-                // in a notification center like widget
-                // but clicking on the close button will close it
-                // onHoverLost: () => this.delete(id),
-
-                // notifd by default does not close notifications
-                // until user input or the timeout specified by sender
-                // which we set to ignore above
-                setup: () => timeout(options.timeout, () => {
-                    if (options.timeout != 0) {
-                        if (options.dismissOnTimeout) {
-                            notifd.get_notification(id).dismiss()
-                        }
-                        this.delete(id)
-                    }
-                })
-            }))
+            this.create(id);
         })
 
         // notifications can be closed by the outside before
@@ -91,6 +82,24 @@ export default class NotificationMap implements Subscribable {
         this.map.get(key)?.destroy()
         this.map.set(key, value)
         this.notifiy()
+    }
+
+    private create(id: number) {
+        if (notifd.get_dont_disturb()) {
+            return;
+        }
+
+        this.set(id, Notification({
+            notification: notifd.get_notification(id)!,
+            setup: () => timeout(this.timeout, () => {
+                if (this.timeout != 0) {
+                    if (this.dismissOnTimeout) {
+                        notifd.get_notification(id).dismiss()
+                    }
+                    this.delete(id)
+                }
+            })
+        }))
     }
 
     private delete(key: number) {

@@ -9,7 +9,7 @@ const notifd = Notifd.get_default()
 
 export function RecentNotifications() {
 
-    const notifs = new NotifictionMap({timeout: 0, limit: 3}) 
+    const notifs = new NotifictionMap({timeout: 0, limit: 3, persist: true}) 
 
     return (
 
@@ -46,7 +46,7 @@ export function RecentNotifications() {
 
 export function NotificationMenu() {
 
-    const notifs = new NotifictionMap({timeout: 0})
+    const notifs = new NotifictionMap({timeout: 0, persist: true})
 
     return (
         <Menu name="notifications"
