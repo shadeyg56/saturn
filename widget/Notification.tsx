@@ -67,7 +67,7 @@ export function Notification(props: NotificationProps) {
 
 export default function NofificationPopups(gdkmonitor: Gdk.Monitor) {
 
-    const notifs = new NotifiationMap({timeout: 0, dismissOnTimeout: false})
+    const notifs = new NotifiationMap({timeout: 5000, dismissOnTimeout: false})
 
     return (
         <window
