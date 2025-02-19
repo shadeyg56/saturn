@@ -9,6 +9,7 @@ import PowerButton from "./modules/PowerButton"
 import MediaIndicator from "./modules/Media"
 import ControlCenterButton from "./modules/ControlCenterButton"
 import Cava from "./modules/Cava"
+import NotificationIndicator from "./modules/NotificationIndicator"
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
     return <window
@@ -35,6 +36,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
             </box>
             <box halign={Gtk.Align.END}>
                 <ControlCenterButton/>
+                <NotificationIndicator/>
                 <box className="rightBox">
                     <Volume/>
                     <BatteryWidget/>
