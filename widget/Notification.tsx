@@ -13,6 +13,10 @@ export function Notification(props: NotificationProps) {
     const notif = props.notification;
     const setup = props.setup;
 
+    const time = new Date(0)
+    time.setUTCSeconds(notif.get_time())
+    const timeString = `${time.getHours()}:${time.getMinutes()}`
+
     return (
         <box className={"notification"}
         setup={setup}
@@ -20,11 +24,15 @@ export function Notification(props: NotificationProps) {
             <box vertical>
                 <box className="notif-header">
                     <label label={notif.get_app_name()}/>
+                    <label label={timeString}
+                    halign={Gtk.Align.END}
+                    hexpand
+                    css={"font-size: 12px;"}
+                    />
                     <button className="notif-close"
                     onClick={() => notif.dismiss()}
                     valign={Gtk.Align.START}
                     halign={Gtk.Align.END}
-                    hexpand
                     >
                         <icon icon="window-close-symbolic"/>
                     </button>
