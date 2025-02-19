@@ -47,7 +47,7 @@
       shellHook = ''
         # Generate types if they don't exist
         if [ ! -d ./@girs ];
-          then ags types -d .
+          then ags types -d . -p
         fi
       '';
     };
