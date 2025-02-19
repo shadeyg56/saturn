@@ -9,13 +9,19 @@ const TIMEOUT_DELAY = 5000
 
 type NotificationMapOpts = {
     timeout: number,
-    dismissOnTimeout?: boolean
+    dismissOnTimeout?: boolean,
+    limit?: number
 }
+
+const notifd = Notifd.get_default()
 
 // The purpose if this class is to replace Variable<Array<Widget>>
 // with a Map<number, Widget> type in order to track notification widgets
 // by their id, while making it conviniently bindable as an array
-export default class NotifiationMap implements Subscribable {
+export default class NotificationMap implements Subscribable {
+
+    private limit: number | undefined = undefined;
+
     // the underlying map to keep track of id widget pairs
     private map: Map<number, Gtk.Widget> = new Map()
 
@@ -29,7 +35,6 @@ export default class NotifiationMap implements Subscribable {
     }
 
     constructor(options: NotificationMapOpts = {timeout: 0, dismissOnTimeout: false}) {
-        const notifd = Notifd.get_default()
 
         /**
          * uncomment this if you want to
@@ -39,8 +44,13 @@ export default class NotifiationMap implements Subscribable {
          */
         // notifd.ignoreTimeout = true
 
+        this.limit = options.limit;
+
         notifd.connect("notified", (_, id) => {
-            console.log("new id ", id)
+            if (notifd.get_dont_disturb()) {
+                return;
+            }
+
             this.set(id, Notification({
                 notification: notifd.get_notification(id)!,
 
@@ -59,7 +69,6 @@ export default class NotifiationMap implements Subscribable {
                         if (options.dismissOnTimeout) {
                             notifd.get_notification(id).dismiss()
                         }
-                        console.log("here")
                         this.delete(id)
                     }
                 })
@@ -69,25 +78,31 @@ export default class NotifiationMap implements Subscribable {
         // notifications can be closed by the outside before
         // any user input, which have to be handled too
         notifd.connect("resolved", (_, id) => {
-            console.log("resolved")
             this.delete(id)
         })
     }
 
     private set(key: number, value: Gtk.Widget) {
+        if (this.limit != undefined && this.map.size === this.limit) {
+            const first = Array.from(this.map.keys())[0]
+            this.delete(first)
+        }
         // in case of replacecment destroy previous widget
-        print("current", this.map.get(key))
         this.map.get(key)?.destroy()
         this.map.set(key, value)
         this.notifiy()
-        this.map.forEach((_, key) => console.log(key))
     }
 
     private delete(key: number) {
         this.map.get(key)?.destroy()
         this.map.delete(key)
         this.notifiy()
-        console.log(key, "deleted")
+    }
+
+    public disposeAll() {
+        this.map.forEach((_, id) => {
+            notifd.get_notification(id).dismiss()
+        })
     }
 
     // needed by the Subscribable interface

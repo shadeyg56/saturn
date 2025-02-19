@@ -8,7 +8,7 @@
     min-width: 295px;
 }
 
-.controlcenter button{
+.toggles button, .sliders-box button{
     padding: 6px 6px;
     margin: 5px 5px;
     border-radius: 6px;
@@ -16,7 +16,7 @@
     font-size: 16pt;
 }
 
-.controlcenter label{
+.toggles label{
     padding: 6px 6px;
     margin: 5px 5px;
     border-radius: 6px;
@@ -153,3 +153,28 @@
 	font-size: 20px;
 	margin-right: -5px;
 }
+
+.notifs-recent {
+    margin: 15px 10px;
+}
+
+.notifs-recent-header {
+	margin: 10px 25px 0 15px;
+
+}
+
+.notifs-close-all, .dnd {
+	margin-right: 10px;
+	background-color: $surface1;
+	border-radius: 10px
+}
+
+.notifs-close-all {
+    font-size: 30px;
+    color: $red;
+}
+
+.dnd {
+    font-size: 25px;
+    padding: 5px;
+}  

@@ -7,6 +7,7 @@ import { NetworkToggle, WifiMenu } from "./modules/Network";
 import BluetoothToggle, { BluetoothMenu } from "./modules/Bluetooth";
 import Governors from "./modules/Governors";
 import AudioMenu from "./modules/AudioMenu";
+import { NotificationMenu, RecentNotifications } from "./modules/Notifications";
 
 function Row(toggles: Gtk.Widget[]=[], menus: Gtk.Widget[]=[]) {
     return (
@@ -43,9 +44,12 @@ function MainContainer() {
                 <Volume/>
                 <BrightnessWidget/>
             </box>
-            {
-                Row([Homogeneous([Row([Homogeneous([NetworkToggle(), BluetoothToggle()], true)]), Governors()])])
-            }
+            <box className="toggles">
+                {
+                    Row([Homogeneous([Row([Homogeneous([NetworkToggle(), BluetoothToggle()], true)]), Governors()])])
+                }
+            </box>
+            <RecentNotifications/>
         </box>
     )
 }
@@ -74,7 +78,7 @@ export default function ControlCenter(monitor: Gdk.Monitor) {
                     <WifiMenu/>
                     <BluetoothMenu/>
                     <AudioMenu/>
-
+                    <NotificationMenu/>
                 </stack>
             </revealer>
         </window>
