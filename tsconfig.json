@@ -1,20 +1,10 @@
 {
-    "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
         "experimentalDecorators": true,
         "jsx": "react-jsx",
-        "jsxImportSource": "/nix/store/v6y0zann4p9rygr3hwxl5h3rgwhsr8y1-astal-gjs/share/astal/gjs/gtk3",
+        "jsxImportSource": "astal/gtk3",
         "module": "ES2022",
         "moduleResolution": "Bundler",
-        "paths": {
-            "astal": [
-                "/nix/store/v6y0zann4p9rygr3hwxl5h3rgwhsr8y1-astal-gjs/share/astal/gjs"
-            ],
-            "astal/*": [
-                "/nix/store/v6y0zann4p9rygr3hwxl5h3rgwhsr8y1-astal-gjs/share/astal/gjs/*"
-            ]
-        },
-        "strict": true,
         "target": "ES2022"
     }
 }
