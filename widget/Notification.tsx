@@ -39,7 +39,7 @@ export function Notification(props: NotificationProps) {
                 </box>
                 <box className="notif-main">
                     <box className={"notif-img"}
-                    css={`background-image: url(${notif.get_image()})`}
+                    css={`background-image: url("${notif.get_image()}");`}
                     visible={notif.get_image() !== null}
                     />
                     <box vertical>
