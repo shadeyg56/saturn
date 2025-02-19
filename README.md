@@ -17,9 +17,9 @@ https://github.com/user-attachments/assets/c1995cca-1b4b-41ff-81e7-f75f73cd4fe0
 * Media Player/Controls
 * Calendar
 * OSD
+* Notifications
 
 ### Todo
-* Notifications
 * Power Menu
 
 ## Hacking
