@@ -8,6 +8,9 @@ function Workspaces() {
 
     const getButtonClass = (i: number) => {
         const className = Variable.derive([bind(hyprland, "focusedWorkspace"), bind(hyprland, "workspaces")], (currentWorkspace, workspaces) => {
+            if (currentWorkspace === null)
+                return ""
+
             if (currentWorkspace.id === i) {
                 return "focused";
             } else {
