@@ -1,4 +1,4 @@
-import { timeout, Variable } from "astal";
+import { timeout, Variable, exec } from "astal";
 import { App, Widget } from "astal/gtk3";
 
 export const uptime = Variable("").poll(60_000, "cat /proc/uptime", (out) => {
@@ -33,4 +33,9 @@ export function hideWindow(windowName: string, delay: number=300) {
         (window.get_child() as Widget.Revealer).revealChild = false;
         timeout(delay, () => window.hide());
     }
+}
+
+export function getFiles(folderName: string) {
+    const out = exec(["find", folderName, "-type", "f"])
+    return out.split("\n")
 }

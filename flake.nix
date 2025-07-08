@@ -49,6 +49,8 @@
         if [ ! -d ./@girs ];
           then ags types -d . -p
         fi
+
+        export SATURN_ENV=development
       '';
     };
   };
