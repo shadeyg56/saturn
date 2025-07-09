@@ -1,6 +1,10 @@
-# Saturn
+<div align="center">
+    <img src="./assets/icon.png" alt="Saturn Icon" width="400" height="264"/>
+    <h1>Saturn</h1>
+</div>
 
-A simple GTK widget suite for Wayland scaffolded with [AGS](https://github.com/aylur/ags) and built with [Astal](https://github.com/aylur/astal)
+
+Saturn is a simple GTK widget suite for Wayland scaffolded with [AGS](https://github.com/aylur/ags) and built with [Astal](https://github.com/aylur/astal)
 
 As this setup is mostly intended for personal use, there is no configuration options. If you'd like to modify this setup, visit the [Hacking](#hacking) section below
 
