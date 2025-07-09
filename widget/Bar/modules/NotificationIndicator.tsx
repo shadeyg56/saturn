@@ -6,7 +6,7 @@ const notifd = Notifd.get_default()
 export default function NotificationIndicator() {
 
     return (
-        <icon className="notif-indicator"
+        <icon className="barIcon"
         icon="notifications-applet-symbolic"
         css={"font-size: 15px;"}
         visible={bind(notifd, "notifications").as((notifs) => notifs.length !== 0)}

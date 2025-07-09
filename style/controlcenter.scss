@@ -2,14 +2,14 @@
 
 .controlcenter, .menu {
     color: #ffffff;
-    background-color: $base-transparent;
+    background-color: $base;
     border-radius: 12px;
     font-weight: bolder;
     min-width: 295px;
 }
 
 .toggles button, .sliders-box button{
-    padding: 6px 6px;
+    padding: 6px 15px 6px 6px;
     margin: 5px 5px;
     border-radius: 6px;
     background-color: $surface1;
@@ -39,6 +39,7 @@
 
 .profile-picture {
 	background-size: cover;
+    background-position: center;
 	min-width: 75px;
 	min-height: 75px;
 	margin: 5px;
@@ -61,7 +62,7 @@
 
 .sliders-box {
     background-color: $crust;
-    padding: 3px 3px;
+    padding: 3px 15px 3px 3px;
     margin: 6px;
 	border-radius: 12px;
 }
@@ -72,15 +73,26 @@
 
 .sliders-box trough {
     background-color: $surface1;
-    border-radius: 6px;
+    border-radius: 10px;
     min-height: 15px;
+
+    highlight {
+        background-color: $mauve;
+        border-radius: 10px;
+        min-height: 15px;
+    }
+
+    > slider {
+        background-color: $crust;
+        border-radius: 50%;
+        min-height: 15px;
+        min-width: 15px;
+        border: 2px solid $mauve;
+        box-shadow: 0 0 1px $overlay1;
+    }
+
 }
 
-.sliders-box trough highlight {
-    background-color: $mauve;
-    border-radius: 6px;
-    min-height: 15px;
-}
 
 .battery-progress {
     color: #000000;

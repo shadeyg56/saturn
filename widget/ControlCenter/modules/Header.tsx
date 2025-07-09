@@ -43,7 +43,7 @@ export default function Header() {
             >
                 <box>
                     <box className={"profile-picture"}
-                    css={`background-image: url("${SRC}/assets/profile.png");`}
+                    css={`background-image: url("${SRC}/assets/icon.png");`}
                     />
                     <box
                     vertical={true}
