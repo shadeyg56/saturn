@@ -10,6 +10,7 @@ import MediaIndicator from "./modules/Media"
 import ControlCenterButton from "./modules/ControlCenterButton"
 import Cava from "./modules/Cava"
 import NotificationIndicator from "./modules/NotificationIndicator"
+import { toggleWindow } from "../../utils"
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
     return <window
@@ -21,28 +22,33 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         anchor={Astal.WindowAnchor.TOP
             | Astal.WindowAnchor.LEFT
             | Astal.WindowAnchor.RIGHT}
-        margin={6}
-        marginBottom={0}
+        marginBottom={5}
         application={App}>
         <centerbox>
             <box>
                 <Workspaces/>
                 <FocusedWindow/>
             </box>
-            <box>
+            <box className="centerBox">
                 <Clock/>
                 <MediaIndicator/>
                 <Cava/>
             </box>
             <box halign={Gtk.Align.END}>
                 <ControlCenterButton/>
-                <NotificationIndicator/>
-                <box className="rightBox">
-                    <Volume/>
-                    <BatteryWidget/>
-                    <NetworkIndicator/>
-                    <PowerButton/>
-                </box>
+                <eventbox
+                    className="rightBox"
+                    onClick={() => toggleWindow("controlcenter")}
+                    child={
+                        <box>
+                            <NotificationIndicator/>
+                            <Volume/>
+                            <BatteryWidget/>
+                            <NetworkIndicator/>
+                            <PowerButton/>
+                        </box>
+                    }
+                ></eventbox>
             </box>
         </centerbox>
     </window>
