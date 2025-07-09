@@ -1,49 +1,39 @@
 @use "theme" as *;
 
-.bar label {
-    font-family: "JetBrainsMono Nerd Font";
-    font-size: 10pt;
-}
-
 .bar {
-    background-color: $base;
-    min-height: 15px;
+    background-color: $base-transparent;
+    border-radius: 24px;
+    min-height: 32px;
   }
 
-.rightBox{
+.rightBox {
+    background-color: $crust-transparent;
     color: #ffffff;
-
-    > .horizontal {
-        transition: background-color 0.25s ease-in;
-        background-color: $crust;
-        padding: 0 10px;
-        margin: 3px;
-        border-radius: 24px;
-        font-weight: bolder;
-    }
-}
-
-.rightBox:hover {
-    > .horizontal {
-        background-color: $surface2;
-    }
-}
-
-.clock {
-    color: #ffffff;
-    margin: 0 12px;
+    margin: 6px;
+    padding: 0 12px;
+    border-radius: 24px;
     font-weight: bolder;
 }
 
+.clock {
+    background-color: $crust-transparent;
+    color: #ffffff;
+    margin: 6px;
+    padding: 0 12px;
+    border-radius: 24px;
+    font-weight: bolder;
+  }
+
 .focusedTitle {
-    // background-color: $crust;
+    background-color: $crust-transparent;
     color: $mauve;
-    padding: 0 5px;
+    margin: 6px;
+    padding: 0 12px;
     border-radius: 24px;
 }
 
 .focusedTitle label {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bolder;
 }
 
@@ -52,13 +42,12 @@
 }
 
 .player-icon {
-    font-size: 12px;
+    font-size: 16px;
 }
 
 .controlCenterButton {
     font-size: 20pt;
     margin: 3px 3px;
-    opacity: 0;
 }
 
 .controlCenterButton image {
@@ -66,9 +55,10 @@
 }
 
 .barIcon {
-    font-size: 12pt;
+    font-size: 14pt;
     margin: 5px 5px;
 }
+
 
 .volBar {
     min-width: 60px;
@@ -88,8 +78,8 @@
 
 .workspaces {
     color: #ffffff;
-    background-color: $crust;
-    margin: 3px;
+    background-color: $crust-transparent;
+    margin: 6px;
     padding: 0 6px;
     border-radius: 24px;
     font-weight: bolder;
@@ -98,7 +88,7 @@
 .workspaces button {
     padding: 0 0.4rem;
     border-radius: 24px;
-    margin: 0 3px;
+    margin: 0 5px;
     background-color: $surface0;
     transition: background-color 0.25s ease-in;
 }
