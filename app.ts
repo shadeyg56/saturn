@@ -1,4 +1,4 @@
-import { App } from "astal/gtk3"
+import App from "ags/gtk3/app"
 import style from "./style/main.scss"
 import Bar from "./widget/Bar/Bar"
 import ControlCenter from "./widget/ControlCenter/ControlCenter"

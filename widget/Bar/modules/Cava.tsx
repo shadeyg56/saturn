@@ -1,5 +1,5 @@
-import { Widget } from "astal/gtk3";
-import { bind, Variable } from "astal";
+import { Gtk } from "ags/gtk3";
+import { createBinding } from "ags";
 import cairo from "cairo";
 import Cava from "gi://AstalCava";
 import { activePlayer } from "./Media";
@@ -8,9 +8,9 @@ const cava = Cava.get_default()!;
 
 export default function Visualizer() {
 
-    const values = bind(cava, "values");
+    const values = createBinding(cava, "values");
 
-    const setup = (self: Widget.DrawingArea) => {
+    const setup = (self: Gtk.DrawingArea) => {
 
         self.connect("draw", (_, cr: cairo.Context) => {
             
@@ -42,8 +42,8 @@ export default function Visualizer() {
 
 
     return (
-        <box className={"cava"} expand={true} visible={bind(activePlayer)}>
-            <drawingarea expand={true} setup={setup}/>
+        <box class={"cava"} expand={true} visible={activePlayer}>
+            <drawingarea expand={true} $={setup}/>
         </box>
     )
 }

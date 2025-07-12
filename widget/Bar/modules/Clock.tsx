@@ -1,12 +1,12 @@
-import { Variable } from "astal";
-import { toggleWindow } from "../../../utils";
+import { createPoll } from "ags/time";
+import { toggleWindow } from "saturn/utils";
 
-const time = Variable("").poll(1000, "date +%H:%M")
+const time = createPoll("", 1000, "date +%H:%M");
 
 export default function Clock() {
     return (
         <button onClick={() => toggleWindow("calendar")}>
-            <label className="clock" label={time()}></label>
+            <label class="clock" label={time}></label>
         </button>
     )
 }

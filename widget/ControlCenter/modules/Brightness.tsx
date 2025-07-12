@@ -1,5 +1,5 @@
-import { bind } from "astal";
 import Brightness from "../../../objects/Brightness";
+import { createBinding } from "ags";
 
 const brightness = Brightness.get_default();
 
@@ -8,7 +8,7 @@ function BrightnessSlider() {
         <slider
         drawValue={false}
         hexpand={true}
-        value={bind(brightness, "screen")}
+        value={createBinding(brightness, "screen")}
         onDragged={(slider) => brightness.screen = slider.get_value()}
         />
     )
@@ -17,7 +17,7 @@ function BrightnessSlider() {
 export default function BrightnessWidget() {
     return (
         <box
-        tooltipText={bind(brightness, "screen").as((v) => 
+        tooltipText={createBinding(brightness, "screen").as((v) => 
             `Screen Brightness: ${Math.floor(v * 100)}%`)}
         >
             <button>

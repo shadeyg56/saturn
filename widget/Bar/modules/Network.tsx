@@ -1,9 +1,11 @@
 import Network from "gi://AstalNetwork";
-import { bind } from "astal";
+import { createBinding } from "ags";
 
 export default function NetworkIndicator() {
 
     const network = Network.get_default();
+
+    const primaryNetwork = createBinding(network, "primary");
 
     const enumMap = new Map<number, string>([
         [Network.Primary.UNKNOWN, "disconnected"],
@@ -12,16 +14,16 @@ export default function NetworkIndicator() {
     ])
 
     return (
-        <stack className="barIcon"
-        shown={bind(network, "primary").as((p) => enumMap.get(p) ?? "disconnected")}
-        >
-            <icon name="wifi"
+        <stack class="barIcon"
+        visibleChildName={primaryNetwork.as((p) => enumMap.get(p) ?? "disconnected")}
+        >   
+            <icon $type="named" name="wifi"
             icon="network-wireless-symbolic"
             />
-            <icon name="wired"
+            <icon $type="named" name="wired"
             icon="network-wired-symbolic"
             />
-            <icon name="disconnected"
+            <icon $type="named" name="disconnected"
             icon="network-wireless-offline-symbolic"
             />
         </stack>

@@ -1,5 +1,7 @@
-import { GObject, register, property } from "astal/gobject";
-import { execAsync, exec, monitorFile } from "astal";
+import { monitorFile } from "ags/file";
+import GObject, { getter, register, setter } from "ags/gobject";
+import { exec, execAsync } from "ags/process";
+
 
 @register({GTypeName: "Auto-cpufreq"})
 class Autocpufreq extends GObject.Object {
@@ -16,9 +18,10 @@ class Autocpufreq extends GObject.Object {
 
     #available = this.#isAvailable();
 
-    @property(String)
+    @getter(String)
     get governor() { return this.#governor; }
 
+    @setter(String)
     set governor(governor) {
         if (governor == 'Default') {
             governor = 'reset'
@@ -31,7 +34,7 @@ class Autocpufreq extends GObject.Object {
             .catch(console.error);
     }
 
-    @property(Boolean)
+    @getter(Boolean)
     get available() { return this.#available; }
 
     constructor() {

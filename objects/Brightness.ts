@@ -1,5 +1,6 @@
-import { GObject, register, property } from "astal/gobject";
-import { exec, execAsync, monitorFile } from "astal";
+import { monitorFile } from "ags/file";
+import GObject, { getter, register, setter } from "ags/gobject";
+import { exec, execAsync } from "ags/process";
 
 @register({GTypeName: "Brightness"})
 class Brightness extends GObject.Object {
@@ -17,9 +18,10 @@ class Brightness extends GObject.Object {
     #interface = exec("sh -c 'ls -w1 /sys/class/backlight | head -1'");
     #max = Number(exec('brightnessctl max'));
 
-    @property(Number)
+    @getter(Number)
     get screen() { return this.#screen; }
 
+    @setter(Number)
     set screen(percent) {
         if (percent < 0)
             percent = 0;

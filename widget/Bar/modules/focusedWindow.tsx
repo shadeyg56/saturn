@@ -1,21 +1,21 @@
 import Hyprland from "gi://AstalHyprland"
-import { bind, Variable } from "astal";
+import { createBinding, createComputed, With} from "ags";
 import Pango from "gi://Pango";
 
 function FocusedWindow() {
 
     const hyprland = Hyprland.get_default();
 
-    const client = Variable.derive([bind(hyprland, "focusedClient")], (c) => c);
+    const client = createBinding(hyprland, "focusedClient")
 
     return (
         <box 
-        className="focusedTitle"
-        visible={bind(hyprland, "focusedClient").as((client) => client ? true : false)}
+        class="focusedTitle"
+        visible={client.as((client) => client ? true : false)}
         >
-            {
-                client((client) => {
-                    const title = (client != null) ? bind(client, "title") : "";
+            <With value={client}>
+                {(c) => {
+                    const title = (client != null) ? c.title : "";
                     return (
                         <label
                         maxWidthChars={40}
@@ -23,8 +23,8 @@ function FocusedWindow() {
                         label={title}
                         />
                     )
-                })
-            }
+                }}
+            </With>
 
         </box>
     )

@@ -1,5 +1,6 @@
-import { bind } from "astal";
+import { createBinding } from "ags";
 import Autocpufreq from "../../../objects/Autocpufreq";
+import { Gtk } from "ags/gtk3";
 
 interface GovernorButtonProps {
     name: string,
@@ -10,11 +11,11 @@ const auto_cpufreq = Autocpufreq.get_default();
 
 function GovernorButton({name, icon}: GovernorButtonProps) {
     
-    const activeBind = bind(auto_cpufreq, "governor")
+    const activeBind = createBinding(auto_cpufreq, "governor")
         .as((governor) => governor.toLowerCase() === name.toLowerCase())
     
     return (
-        <button className={bind(activeBind).as((active) => "governor-button" + (active ? " active" : ""))}
+        <button class={activeBind.as((active) => "governor-button" + (active ? " active" : ""))}
         onClick={() => auto_cpufreq.governor = (activeBind.get() ? "Default" : name)}
         >
             <box>
@@ -27,9 +28,9 @@ function GovernorButton({name, icon}: GovernorButtonProps) {
 
 export default function Governors() {
     return (
-        <box className="toggle-button"
+        <box class="toggle-button"
         homogeneous={true}
-        visible={bind(auto_cpufreq, "available")}
+        visible={createBinding(auto_cpufreq, "available")}
         >  
             <GovernorButton name="Powersave"
             icon="power-profile-power-saver-symbolic"
@@ -38,6 +39,6 @@ export default function Governors() {
             icon="power-profile-performance-symbolic"
             />
         </box>
-    )
+    ) as Gtk.Widget;
 }
 

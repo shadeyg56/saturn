@@ -7,12 +7,6 @@
     ags = {
       url = "github:aylur/ags";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.astal.follows = "astal";
-    };
-
-    astal = {
-      url = "github:aylur/astal";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
   };
@@ -24,13 +18,18 @@
     agsPkgs = ags.packages.${system};
   in {
 
-    packages.${system}.default = ags.lib.bundle {
-      inherit pkgs;
-      src = ./.;
+    packages.${system}.default = pkgs.stdenv.mkDerivation {
       name = "saturn";
-      entry = "app.ts";
+      src = ./.;
 
-      extraPackages = with agsPkgs; [
+      nativeBuildInputs = with pkgs; [
+        wrapGAppsHook
+        gobject-introspection
+        ags.packages.${system}.default
+      ];
+
+      buildInputs = with agsPkgs; [
+        astal3
         hyprland
         wireplumber
         battery
@@ -39,7 +38,13 @@
         bluetooth
         cava
         notifd
+        pkgs.gjs
       ];
+
+      installPhase = ''
+        mkdir -p $out/bin
+        ags bundle app.ts $out/bin/saturn --gtk 3
+      '';
     };
 
     devShells.${system}.default = pkgs.mkShell {
@@ -47,7 +52,7 @@
       shellHook = ''
         # Generate types if they don't exist
         if [ ! -d ./@girs ];
-          then ags types -d . -p
+          then ags types -d . -u
         fi
 
         export SATURN_ENV=development

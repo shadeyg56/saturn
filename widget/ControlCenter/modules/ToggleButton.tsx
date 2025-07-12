@@ -1,45 +1,48 @@
-import { bind, timeout, Variable } from "astal";
-import { Gtk, Widget, Astal } from "astal/gtk3";
-import Binding from "astal/binding";
-import { controlCenterStackWidget } from "../ControlCenter";
+import { Astal, Gtk } from "ags/gtk3";
+import { setControlCenterStackWidget } from "../ControlCenter";
+import { Accessor, createState } from "ags";
+import { timeout } from "ags/time";
 
 interface SimpleToggleProps {
-    child?: Gtk.Widget,
+    child?: MenuChild,
     toggle: () => void,
-    condition: Binding<boolean>,
+    condition: Accessor<boolean>,
 }
 
 interface ArrowButtonProps {
     name: string
-    icon: Gtk.Widget,
-    label: Gtk.Widget,
+    icon: JSX.Element,
+    label: JSX.Element,
     activate: () => void,
     deactivate: () => void,
     activateOnArrow?: boolean,
-    condition: Binding<boolean>
+    condition: Accessor<boolean>
 }
+
+type MenuChild = Gtk.Widget | Accessor<Gtk.Widget> | Object | Accessor<Object>;
 
 interface MenuProps {
     name: string,
     title: string,
-    child?: Gtk.Widget | Binding<Gtk.Widget>
+    child?: MenuChild
 }
 
-const opened = Variable("");
+const [opened, setOpened] = createState("");
 
 export function Arrow(name: string, activate: () => void) {
     let deg = 0;
     let iconOpened = false;
 
-    const iconSetup = (icon: Widget.Icon) => {
-        opened.subscribe((opened) => {
-            if (opened === name && !iconOpened || opened !== name && iconOpened) {
-                const step = opened === name ? 10 : -10;
+    const iconSetup = (icon: JSX.IntrinsicElements["icon"]) => {
+        opened.subscribe(() => {
+            const openedValue = opened.get();
+            if (openedValue === name && !iconOpened || openedValue !== name && iconOpened) {
+                const step = openedValue === name ? 10 : -10;
                 iconOpened = !iconOpened;
                 for (let i = 0; i < 9; ++i) {
                     timeout(15 * i, () => {
                         deg += step;
-                        icon.set_css(`-gtk-icon-transform: rotate(${deg}deg);`);
+                        icon.css = (`-gtk-icon-transform: rotate(${deg}deg);`);
                     });
                 }
             }
@@ -50,12 +53,12 @@ export function Arrow(name: string, activate: () => void) {
     return (
         <button
         onClick={() => {
-            opened.set(opened.get() === name ? "" : name)
+            setOpened(opened.get() === name ? "" : name)
             activate();
         }}
         >
             <icon icon="pan-end-symbolic"
-            setup={iconSetup}
+            $={iconSetup}
             />
         </button>
     )
@@ -72,7 +75,7 @@ export function ArrowToggleButton({
 }: ArrowButtonProps) {
 
     return (
-        <box className={bind(condition).as((c) => {
+        <box class={condition.as((c) => {
             let name = "toggle-button";
             if (c)
                 name += " active";
@@ -81,14 +84,14 @@ export function ArrowToggleButton({
             <button
             onClick={(_, event) => {
                 if (event.button === Astal.MouseButton.PRIMARY) {
-                    controlCenterStackWidget.set(name)
+                    setControlCenterStackWidget(name)
 
                 }
                 else if (event.button === Astal.MouseButton.SECONDARY) {
                     if (condition.get()) {
                         deactivate();
                         if (opened.get() === name)
-                            opened.set("");
+                            setOpened("");
                     } else {
                         activate();
                     }
@@ -96,7 +99,7 @@ export function ArrowToggleButton({
 
             }}
             >
-                <box className="label-box-horizontal"
+                <box class="label-box-horizontal"
                 hexpand={true}
                 >
                     {icon}
@@ -109,19 +112,19 @@ export function ArrowToggleButton({
 
 export function Menu({name, title, child}: MenuProps) {
     return (
-        <box name={name} vertical={true} className="menu">
+        <box name={name} vertical={true} class="menu">
                 <button
-                onClick={() => controlCenterStackWidget.set("controlcenter")}
+                onClick={() => setControlCenterStackWidget("controlcenter")}
                 halign={Gtk.Align.START}
-                className="menu-back"
+                class="menu-back"
                 >
                     <icon icon="go-previous-symbolic"/>
                 </button>
-                <label className="menu-title" label={title}
+                <label class="menu-title" label={title}
                 halign={Gtk.Align.START}
                 />
                 <scrollable vexpand={true}>
-                    {child}
+                    {child instanceof Accessor ? child.get() : child}
                 </scrollable>
         </box>
     )
@@ -137,7 +140,7 @@ export function SimpleToggleButton({
 
 
     return (
-        <button className={bind(condition).as((c) => {
+        <button class={condition.as((c) => {
             let name = "simple-toggle";
             if (c)
                 name += " active";
@@ -147,7 +150,7 @@ export function SimpleToggleButton({
         valign={Gtk.Align.CENTER}
         halign={Gtk.Align.CENTER}
         >
-            {child}
+            {child instanceof Accessor ? child.get() : child}
         </button>
     )
 }

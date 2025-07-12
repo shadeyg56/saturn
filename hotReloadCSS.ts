@@ -1,6 +1,7 @@
-import { App } from "astal/gtk3";
-import { getFiles } from "./utils";
-import { execAsync, monitorFile } from "astal";
+import App from "ags/gtk3/app";
+import { getFiles } from "saturn/utils";
+import { monitorFile } from "ags/file";
+import { execAsync } from "ags/process";
 
 export default function hotReloadCSS() {
     print("CSS Hot-reload Enabled")

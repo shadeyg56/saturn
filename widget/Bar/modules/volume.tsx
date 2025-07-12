@@ -1,6 +1,6 @@
-import { Widget, Gtk } from "astal/gtk3";
-import { bind, Binding, Variable } from "astal";
 import Wp from "gi://AstalWp";
+import { Accessor, createBinding, createState } from "ags";
+import { Astal, Gtk } from "ags/gtk3";
 
 const audio = Wp.get_default()?.get_audio();
 
@@ -8,7 +8,7 @@ function VolumeIcon() {
 
     const volumeThresholds = [101, 67, 34, 1, 0];
 
-    const setupStack = (stack: Widget.Stack) => {
+    const setupStack = (stack: Astal.Stack) => {
         if (!audio)
             return
         audio.get_default_speaker()?.connect("notify", ((speaker) => {
@@ -17,26 +17,26 @@ function VolumeIcon() {
                 return;
             }
 
-            stack.shown = volumeThresholds.find((threshold) => threshold <= speaker.volume * 100)!.toString();
+            stack.visibleChildName = volumeThresholds.find((threshold) => threshold <= speaker.volume * 100)!.toString();
         }))
     }
 
 
     return (
-        <box className="barIcon">
-            <stack setup={(setupStack)}>
-                <icon name="101" icon="audio-volume-overamplified-symbolic"/>
-                <icon name="67" icon="audio-volume-high-symbolic"/>
-                <icon name="34" icon="audio-volume-medium-symbolic"/>
-                <icon name="1" icon="audio-volume-low-symbolic"/>
-                <icon name="0" icon="audio-volume-muted-symbolic"/>
+        <box class="barIcon">
+            <stack $={(setupStack)}>
+                <icon $type="named" name="101" icon="audio-volume-overamplified-symbolic"/>
+                <icon $type="named" name="67" icon="audio-volume-high-symbolic"/>
+                <icon $type="named" name="34" icon="audio-volume-medium-symbolic"/>
+                <icon $type="named" name="1" icon="audio-volume-low-symbolic"/>
+                <icon $type="named" name="0" icon="audio-volume-muted-symbolic"/>
             </stack>
         </box>
     )
 }
 
 interface RevealerProps {
-    revealChild: boolean | Binding<boolean>
+    revealChild: boolean | Accessor<boolean>
 }
 
 function PercentBar({revealChild}: RevealerProps) {
@@ -45,10 +45,10 @@ function PercentBar({revealChild}: RevealerProps) {
         transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT}
         revealChild={revealChild}
         >
-            <slider className="volBar"
+            <slider class="volBar"
             hexpand={true}
             drawValue={false}
-            value={bind(audio!.get_default_speaker()!, "volume")}
+            value={createBinding(audio!.get_default_speaker()!, "volume")}
             onDragged={(slider) => audio?.defaultSpeaker.set_volume(slider.get_value())}
             >
 
@@ -59,25 +59,25 @@ function PercentBar({revealChild}: RevealerProps) {
 
 export default function Volume() {
 
-    const revealChild = Variable(false);
+    const [revealChild, setRevealChild] = createState(false);
 
     return (
         <eventbox
-        className="volume"
-        onHover={() => revealChild.set(true)}
+        class="volume"
+        onHover={() => setRevealChild(true)}
         onHoverLost={(widget, event) => {
             const x = event.x;
             const y = event.y;
             const w = widget.get_allocation().width;
             const h = widget.get_allocation().height;
             if (x < 0 || x > w || y < 0 || y > h) {
-                revealChild.set(false);
+                setRevealChild(false)
             }
         }}
         >
             <box>
                 <VolumeIcon/>
-                <PercentBar revealChild={bind(revealChild)}/>
+                <PercentBar revealChild={revealChild}/>
             </box>
         </eventbox>
         

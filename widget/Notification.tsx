@@ -1,8 +1,8 @@
 import Notifd from "gi://AstalNotifd"
-import { bind } from "astal"
-import { App, Astal, Gdk, Gtk } from "astal/gtk3";
 import NotifiationMap from "../objects/NotificationMap";
 import Pango from "gi://Pango?version=1.0";
+import { Astal, Gdk, Gtk } from "ags/gtk3";
+import App from "ags/gtk3/app";
 
 type NotificationProps = {
     notification: Notifd.Notification
@@ -18,18 +18,18 @@ export function Notification(props: NotificationProps) {
     const timeString = `${time.getHours()}:${time.getMinutes()}`
 
     return (
-        <box className={"notification"}
-        setup={setup}
+        <box class={"notification"}
+        $={setup}
         >
             <box vertical>
-                <box className="notif-header">
+                <box class="notif-header">
                     <label label={notif.get_app_name()}/>
                     <label label={timeString}
                     halign={Gtk.Align.END}
                     hexpand
                     css={"font-size: 12px;"}
                     />
-                    <button className="notif-close"
+                    <button class="notif-close"
                     onClick={() => notif.dismiss()}
                     valign={Gtk.Align.START}
                     halign={Gtk.Align.END}
@@ -37,17 +37,17 @@ export function Notification(props: NotificationProps) {
                         <icon icon="window-close-symbolic"/>
                     </button>
                 </box>
-                <box className="notif-main">
-                    <box className={"notif-img"}
+                <box class="notif-main">
+                    <box class={"notif-img"}
                     css={`background-image: url("${notif.get_image()}");`}
                     visible={notif.get_image() !== null}
                     />
                     <box vertical>
-                        <label className={"notif-summary"} 
+                        <label class={"notif-summary"} 
                         label={notif.get_summary()}
                         halign={Gtk.Align.START}
                         />
-                        <label className={"notif-body"} 
+                        <label class={"notif-body"} 
                         label={notif.get_body()}
                         halign={Gtk.Align.START}
                         wrapMode={Pango.WrapMode.CHAR}
@@ -60,7 +60,7 @@ export function Notification(props: NotificationProps) {
                 spacing={5}
                 >
                     {notif.get_actions().map((action) => 
-                        <button className="notif-action"
+                        <button class="notif-action"
                         onClick={() => notif.invoke(action.id)}
                         hexpand={true}
                         >
@@ -70,7 +70,7 @@ export function Notification(props: NotificationProps) {
                 </box>
             </box>
         </box>
-    )
+    ) as Gtk.Widget
 }
 
 export default function NofificationPopups(gdkmonitor: Gdk.Monitor) {
@@ -91,12 +91,12 @@ export default function NofificationPopups(gdkmonitor: Gdk.Monitor) {
             revealChild={false}
             transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
             >    */}
-            <box className="notifications-popup"
+            <box class="notifications-popup"
             vertical
             //@ts-ignore
-            noImplicitDestroy
+            //noImplicitDestroy
             >
-                {bind(notifs)}
+                {notifs.get()}
 
             </box>
             {/* </revealer> */}

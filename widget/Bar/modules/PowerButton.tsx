@@ -1,4 +1,4 @@
-import { execAsync } from "astal";
+import { execAsync } from "ags/process";
 
 
 export default function PowerButton() {
@@ -8,7 +8,7 @@ export default function PowerButton() {
     }
 
     return (
-        <button className="powerButton barIcon"
+        <button class="powerButton barIcon"
         onClick={handleClick}
         >
             <icon icon="system-shutdown-symbolic"/>

@@ -1,23 +1,23 @@
-import { Gdk, App, Astal, Gtk }  from "astal/gtk3";
-import Calendar from "../objects/Calendar";
-import { Variable } from "astal";
+import { createPoll } from "ags/time";
+import App from "ags/gtk3/app";
+import { Astal, Gdk, Gtk } from "ags/gtk3";
 
 
 function DateAndTime() {
 
-    const date = Variable("").poll(100, ['date', '+%A, %B %d, %Y'])
-    const time = Variable("").poll(100, ['date', '+%k:%M:%S'])
+    const date = createPoll("", 100, ['date', '+%A, %B %d, %Y'])
+    const time = createPoll("", 100, ['date', '+%k:%M:%S'])
 
 
     return (
-        <box className="date-and-time"
+        <box class="date-and-time"
         vertical={true}
         >
-            <label className="date"
-            label={date()}
+            <label class="date"
+            label={date}
             />
-            <label className="big-clock"
-            label={(time())}
+            <label class="big-clock"
+            label={(time)}
             />
         </box>
     )
@@ -25,9 +25,9 @@ function DateAndTime() {
 
 function CalendarContainer() {
     return (
-        <box className="calendar-container" vertical={true}>
+        <box class="calendar-container" vertical={true}>
             <DateAndTime/>
-            <Calendar className="calendar"
+            <Gtk.Calendar class="calendar"
             showDayNames={true}
             showDetails={true}
             showHeading={true}

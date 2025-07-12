@@ -1,7 +1,10 @@
-import { timeout, Variable, exec } from "astal";
-import { App, Widget } from "astal/gtk3";
+import App from "ags/gtk3/app";
+import { exec } from "ags/process";
+import { timeout, createPoll } from "ags/time";
+import { Gtk } from "ags/gtk3"
 
-export const uptime = Variable("").poll(60_000, "cat /proc/uptime", (out) => {
+
+export const uptime = createPoll("0:00", 60_000, "cat /proc/uptime", (out, _) => {
     const uptime = Number.parseInt(out.split('.')[0]) / 60;
         if (uptime > 18 * 60)
             return 'Go Sleep';
@@ -16,12 +19,12 @@ export function toggleWindow(windowName: string, delay: number=300) {
     if (window === null)
         return
     if (window.is_visible()) {
-        (window.get_child() as Widget.Revealer).revealChild = false;
+        (window.get_child() as Gtk.Revealer).revealChild = false;
         timeout(delay, () => window.hide());
     }
     else {
         window.show();
-        (window.get_child() as Widget.Revealer).revealChild = true;
+        (window.get_child() as Gtk.Revealer).revealChild = true;
     }
 }
 
@@ -30,7 +33,7 @@ export function hideWindow(windowName: string, delay: number=300) {
         if (window === null)
         return
     if (window.is_visible()) {
-        (window.get_child() as Widget.Revealer).revealChild = false;
+        (window.get_child() as Gtk.Revealer).revealChild = false;
         timeout(delay, () => window.hide());
     }
 }
@@ -38,4 +41,13 @@ export function hideWindow(windowName: string, delay: number=300) {
 export function getFiles(folderName: string) {
     const out = exec(["find", folderName, "-type", "f"])
     return out.split("\n")
+}
+
+export function lookupIcon(iconName: string){
+    const theme = Gtk.IconTheme.get_default();
+    const iconInfo = theme.lookup_icon(iconName, 12, null);
+    if (iconInfo == null) {
+        return null;
+    }
+    return iconInfo.get_filename();
 }

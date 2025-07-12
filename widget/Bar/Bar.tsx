@@ -1,4 +1,5 @@
-import { App, Astal, Gtk, Gdk } from "astal/gtk3"
+import App from "ags/gtk3/app";
+import { Astal, Gtk, Gdk } from "ags/gtk3"
 import Clock from "./modules/Clock"
 import Workspaces from "./modules/Workspaces"
 import FocusedWindow from "./modules/focusedWindow"
@@ -10,13 +11,14 @@ import MediaIndicator from "./modules/Media"
 import ControlCenterButton from "./modules/ControlCenterButton"
 import Cava from "./modules/Cava"
 import NotificationIndicator from "./modules/NotificationIndicator"
-import { toggleWindow } from "../../utils"
+import { toggleWindow } from "saturn/utils"
+import TrayContainer from "./modules/Tray";
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
     return <window
         name="bar"
         namespace="bar0"
-        className="bar"
+        class="bar"
         gdkmonitor={gdkmonitor}
         exclusivity={Astal.Exclusivity.EXCLUSIVE}
         anchor={Astal.WindowAnchor.TOP
@@ -25,30 +27,32 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         marginBottom={5}
         application={App}>
         <centerbox>
-            <box>
+            <box $type="start">
                 <Workspaces/>
                 <FocusedWindow/>
             </box>
-            <box className="centerBox">
+            <box $type="center">
                 <Clock/>
                 <MediaIndicator/>
                 <Cava/>
             </box>
-            <box halign={Gtk.Align.END}>
+            <box halign={Gtk.Align.END}
+            $type="end"
+            >
                 <ControlCenterButton/>
                 <eventbox
-                    className="rightBox"
-                    onClick={() => toggleWindow("controlcenter")}
-                    child={
-                        <box>
-                            <NotificationIndicator/>
-                            <Volume/>
-                            <BatteryWidget/>
-                            <NetworkIndicator/>
-                            <PowerButton/>
-                        </box>
-                    }
-                ></eventbox>
+                class="rightBox"
+                onClick={() => toggleWindow("controlcenter")}
+                >
+                    <box>
+                        <NotificationIndicator/>
+                        <TrayContainer/>
+                        <Volume/>
+                        <BatteryWidget/>
+                        <NetworkIndicator/>
+                        <PowerButton/>
+                    </box>
+                </eventbox>
             </box>
         </centerbox>
     </window>

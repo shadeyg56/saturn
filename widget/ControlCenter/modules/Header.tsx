@@ -1,30 +1,33 @@
 import Battery from "gi://AstalBattery"
-import { bind, exec, execAsync } from "astal";
-import { Gtk } from "astal/gtk3"
-import { uptime } from "../../../utils";
+import { uptime } from "saturn/utils";
+import { createBinding } from "ags";
+import { Gtk } from "ags/gtk3";
+import { exec, execAsync } from "ags/process";
 
 function BatteryProgress() {
 
     const battery = Battery.get_default();
 
+    const percentage = createBinding(battery, "percentage");
+
     const labelOverlay = <label
-        label={bind(battery, "percentage").as(p => `${Math.round(p*100)}%`)}
+        label={percentage.as(p => `${Math.round(p*100)}%`)}
     />
 
     return (
-        <box className="battery-progress"
+        <box class="battery-progress"
         vexpand={true}
         hexpand={true}
-        visible={bind(battery, "isPresent")}
+        visible={createBinding(battery, "isPresent")}
         >
          <overlay
          vexpand={true}
-         overlays={[labelOverlay]}
+         overlays={[labelOverlay as Gtk.Widget]}
          >
             <levelbar
             hexpand={true}
             vexpand={true}
-            value={bind(battery, "percentage")}
+            value={percentage}
             />
          </overlay>
         </box>
@@ -37,30 +40,30 @@ export default function Header() {
     const userName = exec("whoami");
     
     return (
-        <box className="header horizontal">
-            <box className="system-box"
+        <box class="header horizontal">
+            <box class="system-box"
             hexpand={true}
             >
                 <box>
-                    <box className={"profile-picture"}
+                    <box class={"profile-picture"}
                     css={`background-image: url("${SRC}/assets/icon.png");`}
                     />
                     <box
                     vertical={true}
                     >
-                        <label className={"username"}
+                        <label class={"username"}
                         label={userName}
                         />
-                        <label className="uptime"
+                        <label class="uptime"
                         hexpand={false}
                         valign={Gtk.Align.CENTER}
                         vexpand={true}
                         visible={false}
-                        label={uptime().as((uptime) => `uptime: ${uptime}`)}
+                        label={uptime.as((uptime) => `uptime: ${uptime}`)}
                         />
                     </box>
                     
-                    <button className={"powerButton-CC"}
+                    <button class={"powerButton-CC"}
                     valign={Gtk.Align.CENTER}
                     hexpand={true}
                     halign={Gtk.Align.END}

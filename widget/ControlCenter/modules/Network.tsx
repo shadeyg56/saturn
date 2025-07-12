@@ -1,20 +1,21 @@
 import { ArrowToggleButton, Menu } from "./ToggleButton";
-import { Gtk } from "astal/gtk3";
-import { bind, execAsync, Variable } from "astal";
 import Network from "gi://AstalNetwork";
 import Pango from "gi://Pango";
+import { createBinding, createComputed, For, With } from "ags";
+import { execAsync } from "ags/process";
+import { Gtk } from "ags/gtk3";
 
 const network = Network.get_default();
 
-export function NetworkToggle() {
+export function NetworkToggle(): Gtk.Widget {
 
     if (network.wifi) {
-        return <WifiToggle></WifiToggle>
+        return <WifiToggle></WifiToggle> as Gtk.Widget
     }
     else if (network.wired) {
-        return <Ethernet></Ethernet>
+        return <Ethernet></Ethernet> as Gtk.Widget;
     }
-    return <box></box>
+    return (<box></box>) as Gtk.Widget;
     
 }
 
@@ -22,32 +23,32 @@ function Ethernet() {
 
     const label = <label
         ellipsize={Pango.EllipsizeMode.END}
-        label={bind(network.wired, "internet").as((state) => 
+        label={createBinding(network.wired, "internet").as((state) => 
             state === Network.Internet.CONNECTED ? "Connected": "Not Connected")
         }
     />
 
-    return <box className="toggle-button active">
+    return <box class="toggle-button active">
         <button>
-            <box className="label-box-horizontal" hexpand={true}>
+            <box class="label-box-horizontal" hexpand={true}>
                 <icon
-                    icon={bind(network.wired, "iconName")}
+                    icon={createBinding(network.wired, "iconName")}
                 />
                 {label}
             </box>
         </button>
-    </box>
+    </box> as Gtk.Widget;
 }
 
 function WifiToggle() {
     const toggleIcon = <icon
-        icon={bind(network.wifi, "iconName")}
+        icon={createBinding(network.wifi, "iconName")}
     />
 
     const label = <label
         ellipsize={Pango.EllipsizeMode.END}
-        label={Variable.derive([bind(network.wifi, "ssid"), bind(network.wifi, "enabled")], (ssid, enabled) => 
-            enabled ? ssid : "Not Connected")()
+        label={createComputed([createBinding(network.wifi, "ssid"), createBinding(network.wifi, "enabled")], (ssid, enabled) => 
+            enabled ? ssid : "Not Connected")
         }
     />
 
@@ -56,66 +57,73 @@ function WifiToggle() {
         name="network"
         icon={toggleIcon}
         label={label}
-        condition={bind(network.wifi, "enabled")}
+        condition={createBinding(network.wifi, "enabled")}
         deactivate={() => network.wifi.set_enabled(false)}
         activate={() => {
             network.wifi.set_enabled(true)
             network.wifi.scan();
         }}
         />
-    )
+    ) as Gtk.Widget;
 }
 
 export function WifiMenu() {
 
     if (!network.wifi) {
-        return <box></box>
+        return <box></box> as Gtk.Widget;
     }
 
-    const accessPoints = bind(network.wifi, "accessPoints").as((aps) => 
+    const accessPoints = createBinding(network.wifi, "accessPoints").as((aps) => 
         aps.filter((ap, index, array) => 
             array.findIndex(obj => obj.ssid === ap.ssid) === index
             && ap.ssid !== null
         )
     )
 
-    return (
-        <Menu name="network"
-            title="Wifi Network"
-        >
-            <box vertical={true}
+    const menuItems = createComputed([accessPoints, createBinding(network.wifi, "activeAccessPoint")], (aps, active) => 
+        aps.map((ap) => 
+            <button class="menu-item"
+                onClick={() => {
+                    if (active !== null && active.ssid === ap.ssid)
+                        execAsync(`nmcli c down ${ap.ssid}`)
+                    else
+                        execAsync(`nmcli d wifi connect ${ap.ssid}`)
+                }}
             >
-                    {bind(Variable.derive([bind(accessPoints), bind(network.wifi, "activeAccessPoint")], ((aps, active) => aps.map((ap) =>
-                        <button className="menu-item"
-                        onClick={() => {
-                            if (active !== null && active.ssid === ap.ssid)
-                                execAsync(`nmcli c down ${ap.ssid}`)
-                            else
-                                execAsync(`nmcli d wifi connect ${ap.ssid}`)
-                        }}
-                        >
-                            <box>
-                                {active != null && active.ssid === ap.ssid
-                                ? <icon icon={"object-select-symbolic"}
-                                    css={"font-size: 20px;"}
-                                    />
-                                : ""
-                                }
-                                <label label={ap.ssid}
-                                maxWidthChars={25}
-                                ellipsize={Pango.EllipsizeMode.END
-                                }
-                                />
-                                <icon icon={ap.iconName}
-                                halign={Gtk.Align.END}
-                                hexpand={true}
-                                css={"font-size: 20px;"}
-                                />
-                            </box>
-                        </button>
-                    ))))}
-  
-            </box>
-        </Menu>
-    )
+                <box>
+                    {active != null && active.ssid === ap.ssid
+                        ? <icon icon={"object-select-symbolic"}
+                            css={"font-size: 20px;"}
+                        />
+                        : ""
+                    }
+                    <label label={ap.ssid}
+                        maxWidthChars={25}
+                        ellipsize={Pango.EllipsizeMode.END}
+                    />
+                    <icon icon={ap.iconName}
+                        halign={Gtk.Align.END}
+                        hexpand={true}
+                        css={"font-size: 20px;"}
+                    />
+                </box>
+            </button>
+        )
+    );
+
+
+    return (
+        <Menu
+            $type="named"
+            name="network"
+            title="Wifi Network"
+            child={
+                <box vertical={true}>
+                    <For each={menuItems}>
+                        {(item) => item}
+                    </For>
+                </box>
+            }
+        />
+    ) as Gtk.Widget;
 }

@@ -1,5 +1,3 @@
-import { Astal, Gtk, Widget, App, Gdk} from "astal/gtk3";
-import { bind, Variable } from "astal";
 import Header from "./modules/Header";
 import Volume from "./modules/Volume";
 import BrightnessWidget from "./modules/Brightness";
@@ -8,16 +6,19 @@ import BluetoothToggle, { BluetoothMenu } from "./modules/Bluetooth";
 import Governors from "./modules/Governors";
 import AudioMenu from "./modules/AudioMenu";
 import { NotificationMenu, RecentNotifications } from "./modules/Notifications";
+import { Astal, Gdk, Gtk } from "ags/gtk3";
+import { createState } from "ags";
+import App from "ags/gtk3/app";
 
 function Row(toggles: Gtk.Widget[]=[], menus: Gtk.Widget[]=[]) {
     return (
         <box vertical={true}>
-            <box className="row horizontal">
+            <box class="row horizontal">
                 {toggles}
             </box>
             {menus}
         </box>
-    )
+    ) as Gtk.Widget;
 }
 
 function Homogeneous(toggles: Gtk.Widget[], horizontal=false) {
@@ -28,23 +29,24 @@ function Homogeneous(toggles: Gtk.Widget[], horizontal=false) {
         >
             {toggles}
         </box>
-    )
+    ) as Gtk.Widget;
 }
 
 function MainContainer() {
     return (
-        <box className="controlcenter"
+        <box class="controlcenter"
         vertical={true}
+        $type="named"
         name="controlcenter"
         >
             <Header></Header>
-            <box className="sliders-box"
+            <box class="sliders-box"
             vertical={true}
             >
                 <Volume/>
                 <BrightnessWidget/>
             </box>
-            <box className="toggles">
+            <box class="toggles">
                 {
                     Row([Homogeneous([Row([Homogeneous([NetworkToggle(), BluetoothToggle()], true)]), Governors()])])
                 }
@@ -54,7 +56,7 @@ function MainContainer() {
     )
 }
 
-export const controlCenterStackWidget = Variable("controlcenter");
+export const [controlCenterStackWidget, setControlCenterStackWidget] = createState("controlcenter");
 
 export default function ControlCenter(monitor: Gdk.Monitor) {
 
@@ -71,7 +73,7 @@ export default function ControlCenter(monitor: Gdk.Monitor) {
             transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
             >
 
-                <stack shown={controlCenterStackWidget()}
+                <Gtk.Stack visibleChildName={controlCenterStackWidget}
                 transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
                 >
                     <MainContainer></MainContainer>
@@ -79,7 +81,7 @@ export default function ControlCenter(monitor: Gdk.Monitor) {
                     <BluetoothMenu/>
                     <AudioMenu/>
                     <NotificationMenu/>
-                </stack>
+                </Gtk.Stack>
             </revealer>
         </window>
     )

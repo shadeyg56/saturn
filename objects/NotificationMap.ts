@@ -1,8 +1,8 @@
-import { Astal, Gtk, Gdk } from "astal/gtk3"
 import Notifd from "gi://AstalNotifd"
 import { Notification }from "../widget/Notification"
-import { type Subscribable } from "astal/binding"
-import { Variable, bind, timeout } from "astal"
+import { Accessor, createState, Setter, State } from "ags"
+import { Gtk } from "ags/gtk3"
+import { timeout } from "ags/time"
 
 // see comment below in constructor
 const TIMEOUT_DELAY = 5000
@@ -19,7 +19,7 @@ const notifd = Notifd.get_default()
 // The purpose if this class is to replace Variable<Array<Widget>>
 // with a Map<number, Widget> type in order to track notification widgets
 // by their id, while making it conviniently bindable as an array
-export default class NotificationMap implements Subscribable {
+export default class NotificationMap extends Accessor<Array<Gtk.Widget>> {
 
     private limit: number | undefined = undefined;
     private timeout: number = 0;
@@ -31,13 +31,14 @@ export default class NotificationMap implements Subscribable {
 
     // it makes sense to use a Variable under the hood and use its
     // reactivity implementation instead of keeping track of subscribers ourselves
-    private var: Variable<Array<Gtk.Widget>> = Variable([])
+    private var: Accessor<Array<Gtk.Widget>>;
+    private setVar: Setter<Array<Gtk.Widget>>
 
     // notify subscribers to rerender when state changes
-    private notifiy() {
-        this.var.set([...this.map.values()].reverse())
+    private notify() {
+        this.setVar([...this.map.values()].reverse())
     }
-
+    
     constructor(options: NotificationMapOpts = {timeout: 0, dismissOnTimeout: false, persist: false}) {
 
         /**
@@ -47,7 +48,8 @@ export default class NotificationMap implements Subscribable {
          * they might not work, since the sender already treats them as resolved
          */
         // notifd.ignoreTimeout = true
-
+        super(() => this.var.get());
+        [this.var, this.setVar] = createState<Array<Gtk.Widget>>([]);
         this.limit = options.limit;
         this.timeout = options.timeout;
         this.dismissOnTimeout = options.dismissOnTimeout;
@@ -81,7 +83,7 @@ export default class NotificationMap implements Subscribable {
         // in case of replacecment destroy previous widget
         this.map.get(key)?.destroy()
         this.map.set(key, value)
-        this.notifiy()
+        this.notify()
     }
 
     private create(id: number) {
@@ -105,7 +107,7 @@ export default class NotificationMap implements Subscribable {
     private delete(key: number) {
         this.map.get(key)?.destroy()
         this.map.delete(key)
-        this.notifiy()
+        this.notify()
     }
 
     public disposeAll() {
@@ -115,12 +117,12 @@ export default class NotificationMap implements Subscribable {
     }
 
     // needed by the Subscribable interface
-    get() {
+    #get() {
         return this.var.get()
     }
 
     // needed by the Subscribable interface
-    subscribe(callback: (list: Array<Gtk.Widget>) => void) {
-        return this.var.subscribe(callback)
-    }
+    // #subscribe(callback: (list: Array<Gtk.Widget>) => void) {
+    //     return this.var.subscribe(callback)
+    // }
 }

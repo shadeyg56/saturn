@@ -1,15 +1,15 @@
-import { Gtk } from "astal/gtk3";
-import { bind } from "astal";
+import { createBinding } from "ags";
 import { MediaWidgetProps } from "./Media";
 import Mpris from "gi://AstalMpris";
+import { Gtk } from "ags/gtk3";
 
 function Play({player}: MediaWidgetProps) {
     return (
-        <button className="play-button"
+        <button class="play-button"
         onClick={() => player.play_pause()}
         >
             <icon
-            icon={bind(player, "playbackStatus").as((status) => 
+            icon={createBinding(player, "playbackStatus").as((status) => 
                 status === Mpris.PlaybackStatus.PLAYING
                 ? "media-playback-pause-symbolic"
                 : "media-playback-start-symbolic"
@@ -21,9 +21,9 @@ function Play({player}: MediaWidgetProps) {
 
 function Next({player}: MediaWidgetProps) {
     return (
-        <button className="next-button"
+        <button class="next-button"
         onClick={() => player.next()}
-        visible={bind(player, "canGoNext")}
+        visible={createBinding(player, "canGoNext")}
         >
             <icon
             icon="media-skip-backward-rtl-symbolic"
@@ -34,9 +34,9 @@ function Next({player}: MediaWidgetProps) {
 
 function Previous({player}: MediaWidgetProps) {
     return (
-        <button className="previous-button"
+        <button class="previous-button"
         onClick={() => player.previous()}
-        visible={bind(player, "canGoPrevious")}
+        visible={createBinding(player, "canGoPrevious")}
         >
             <icon
             icon="media-skip-backward-symbolic"
@@ -48,11 +48,11 @@ function Previous({player}: MediaWidgetProps) {
 function Shuffle({player}: MediaWidgetProps) {
     return (
         <button 
-        className={bind(player, "shuffleStatus").as((status) =>
+        class={createBinding(player, "shuffleStatus").as((status) =>
             status === Mpris.Shuffle.ON ? "shuffle-button active" : "shuffle-button"
         )}
         onClick={() => player.shuffle()}
-        visible={bind(player, "shuffleStatus").as((status) => 
+        visible={createBinding(player, "shuffleStatus").as((status) => 
             status !== Mpris.Shuffle.UNSUPPORTED
         )}
         >
@@ -66,16 +66,16 @@ function Shuffle({player}: MediaWidgetProps) {
 function Loop({player}: MediaWidgetProps) {
     return (
         <button 
-        className={bind(player, "loopStatus").as((status) =>
+        class={createBinding(player, "loopStatus").as((status) =>
             status !== Mpris.Loop.NONE ? "loop-button active" : "loop-button"
         )}
         onClick={() => player.loop()}
-        visible={bind(player, "loopStatus").as((status) => 
+        visible={createBinding(player, "loopStatus").as((status) => 
             status !== Mpris.Loop.UNSUPPORTED
         )}
         >
             <icon
-            icon={bind(player, "loopStatus").as((status) => 
+            icon={createBinding(player, "loopStatus").as((status) => 
                 status === Mpris.Loop.TRACK
                 ? "media-playlist-repeat-song-symbolic"
                 : "media-playlist-repeat-symbolic"
@@ -88,7 +88,7 @@ function Loop({player}: MediaWidgetProps) {
 
 export default function MediaControls({player}: MediaWidgetProps) {
     return (
-        <box className="media-controls"
+        <box class="media-controls"
         hexpand={true}
         halign={Gtk.Align.CENTER}
         >
