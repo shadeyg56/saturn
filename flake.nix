@@ -38,12 +38,15 @@
         bluetooth
         cava
         notifd
+        tray
         pkgs.gjs
       ];
 
       installPhase = ''
         mkdir -p $out/bin
-        ags bundle app.ts $out/bin/saturn --gtk 3
+        mkdir -p $out/share
+        cp -r * $out/share
+        ags bundle app.ts $out/bin/saturn --gtk 3 -d "SRC='$out/share'"
       '';
     };
 
